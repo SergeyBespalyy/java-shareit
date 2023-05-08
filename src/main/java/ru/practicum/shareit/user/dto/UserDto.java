@@ -1,21 +1,18 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 /**
- * Класс описывает модель User
+ * Класс описывает модель UserDto
  */
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class User {
+public class UserDto {
+
     private Long id;
 
     @NotBlank(message = "Имя не может быть пустым")
@@ -24,4 +21,5 @@ public class User {
     @NotBlank(message = "Email не может быть пустым")
     @Email(message = "Электронная почта не может быть пустой и должна содержать символ @")
     private String email;
+
 }
