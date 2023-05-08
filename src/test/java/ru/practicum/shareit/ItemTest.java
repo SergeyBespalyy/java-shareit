@@ -295,7 +295,7 @@ public class ItemTest {
                 .andExpect(status().isOk());
 
 
-        mockMvc.perform(get("/items/search?text="+ text)
+        mockMvc.perform(get("/items/search?text=" + text)
                         .header("X-Sharer-User-Id", userId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(2))
@@ -320,7 +320,7 @@ public class ItemTest {
                 .andExpect(status().isOk());
 
 
-        mockMvc.perform(get("/items/search?text="+ text)
+        mockMvc.perform(get("/items/search?text=" + text)
                         .header("X-Sharer-User-Id", userId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -350,10 +350,10 @@ public class ItemTest {
                 .andExpect(status().isOk());
 
 
-        mockMvc.perform(get("/items/search?text="+ text)
+        mockMvc.perform(get("/items/search?text=" + text)
                         .header("X-Sharer-User-Id", userId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0))) ;
+                .andExpect(jsonPath("$", hasSize(0)));
 
     }
 }

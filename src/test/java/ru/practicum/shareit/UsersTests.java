@@ -30,7 +30,7 @@ public class UsersTests {
 
     @BeforeEach
     public void setUp() throws Exception {
-        User user = new User(1L,"user", "user@user.com");
+        User user = new User(1L, "user", "user@user.com");
         String jsonUser = objectMapper.writeValueAsString(user);
 
         mockMvc.perform(post("/users")
@@ -84,7 +84,6 @@ public class UsersTests {
     }
 
 
-
     @Test
     public void shouldUpdatePatchUserWhenStatus200() throws Exception {
         User user = new User(1L, "update", "update@user.com");
@@ -124,7 +123,7 @@ public class UsersTests {
 
     @Test
     public void shouldDeleteUser() throws Exception {
-        User user = new User(2L,"userNew", "userNew@userNew.com");
+        User user = new User(2L, "userNew", "userNew@userNew.com");
         String jsonUser = objectMapper.writeValueAsString(user);
 
         mockMvc.perform(post("/users")
