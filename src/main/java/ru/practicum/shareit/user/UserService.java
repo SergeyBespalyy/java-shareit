@@ -17,28 +17,29 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
 
-    public UserDto create(UserDto dto){
-       User user = UserMapper.toUser(dto);
-       User newUser = userRepository.save(user);
-        return  UserMapper.toUserDto(newUser);
+    public UserDto create(UserDto dto) {
+        User user = UserMapper.toUser(dto);
+        User newUser = userRepository.save(user);
+        return UserMapper.toUserDto(newUser);
     }
 
-    public List<UserDto> getAll(){
+    public List<UserDto> getAll() {
         List<User> userList = userRepository.findAll();
         return userList.stream().map(UserMapper::toUserDto).collect(Collectors.toList());
     }
 
-    public UserDto getById(Long id){
+    public UserDto getById(Long id) {
         User user = userRepository.findById(id);
         return UserMapper.toUserDto(user);
     }
-    public UserDto update(Long id, UserDto dto){
+
+    public UserDto update(Long id, UserDto dto) {
         User user = UserMapper.toUser(dto);
         User newUser = userRepository.update(id, user);
         return UserMapper.toUserDto(newUser);
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         userRepository.delete(id);
     }
 

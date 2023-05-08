@@ -28,15 +28,16 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+
     @PostMapping
-    public UserDto create(@Valid @RequestBody UserDto user, BindingResult result){
-      log.info("Получен запрос к эндпоинту /users create");
+    public UserDto create(@Valid @RequestBody UserDto user, BindingResult result) {
+        log.info("Получен запрос к эндпоинту /users create");
         if (result.hasErrors()) {
             String errorMessage = result.getFieldError("fieldName").getDefaultMessage();
             log.warn(errorMessage);
             throw new ValidationException(errorMessage);
         }
-      return userService.create(user);
+        return userService.create(user);
     }
 
     @GetMapping
@@ -53,8 +54,8 @@ public class UserController {
 
     @PatchMapping("/{id}")
     public UserDto update(@PathVariable("id") Long userId,
-                       @RequestBody UserDto dto,
-                       BindingResult result){
+                          @RequestBody UserDto dto,
+                          BindingResult result) {
         log.info("Получен запрос к эндпоинту: /users update с id={}", userId);
         if (result.hasErrors()) {
             String errorMessage = result.getFieldError("fieldName").getDefaultMessage();
@@ -65,7 +66,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public HttpStatus delete(@PathVariable("id") Long userId){
+    public HttpStatus delete(@PathVariable("id") Long userId) {
         log.info("Получен запрос к эндпоинту: /users delete с id={}", userId);
         userService.delete(userId);
         return HttpStatus.OK;
