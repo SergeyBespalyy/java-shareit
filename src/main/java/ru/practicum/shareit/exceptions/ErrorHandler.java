@@ -36,37 +36,6 @@ public class ErrorHandler {
         log.warn("Ошибка ValidationException {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
-
-//    @ExceptionHandler(Throwable.class)
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    public ErrorResponse onThrowableException(final Throwable e) {
-//        log.warn("Исключение Throwable {}", e.getMessage());
-//        return new ErrorResponse("Непредвиденная ошибка");
-//    }
 }
 
-
-//
-//    @ExceptionHandler(FilmAlreadyExistException.class)
-//    @ResponseStatus(HttpStatus.NOT_FOUND)
-//    public ErrorResponse handleAlreadyExistExceptionUserOrFilm(final FilmAlreadyExistException e) {
-//        log.warn("Исключение FilmAlreadyExistException {}", e.getMessage());
-//        return new ErrorResponse(e.getMessage());
-//    }
-//
-//    @ExceptionHandler(IncorrectParameterException.class)
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    public ErrorResponse handleValidationException(final IncorrectParameterException e) {
-//        log.warn("Исключение IncorrectParameterException {}", e.getMessage());
-//        return new ErrorResponse("Ошибка с параметром{}", e.getParameter());
-//    }
-//
-
-//
-//    @ExceptionHandler(ConstraintViolationException.class)
-//    public ResponseEntity<String> onConstraintValidationException(final ConstraintViolationException ex) {
-//        log.warn("Исключение ConstraintViolationException {}", ex.getMessage());
-//        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-//    }
-//
 
