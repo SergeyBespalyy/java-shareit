@@ -1,13 +1,11 @@
 package ru.practicum.shareit.user;
 
-import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.dto.UserDto;
 
 /**
  * Класс описывает UserMapper, переводит USER в ДТО и обратно
  */
 
-@Component
 public class UserMapper {
     public static UserDto toUserDto(User newUser) {
         return UserDto.builder()
