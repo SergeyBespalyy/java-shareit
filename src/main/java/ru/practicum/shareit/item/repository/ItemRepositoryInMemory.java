@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 /**
@@ -19,13 +20,14 @@ import java.util.stream.Collectors;
 @Repository
 @Slf4j
 public class ItemRepositoryInMemory implements ItemRepository {
-    private Long id = 0L;
+    private final AtomicLong id = new AtomicLong(0L);
     private final Map<Long, Item> itemMap = new HashMap<>();
 
     @Override
     public Item save(Item item) {
-        itemMap.put(++id, item);
-        item.setId(id);
+        Long itemId = id.incrementAndGet();
+        itemMap.put(itemId, item);
+        item.setId(itemId);
         return item;
     }
 
