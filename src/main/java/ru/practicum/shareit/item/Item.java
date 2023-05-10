@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item.dto;
+package ru.practicum.shareit.item;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,18 +8,15 @@ import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.User;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 /**
- * Класс описывает модель ItemDto
+ * Класс описывает модель Item
  */
-
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class ItemDto {
-
+public class Item {
     private Long id;
 
     @NotBlank(message = "Имя не может быть пустым")
@@ -30,13 +27,10 @@ public class ItemDto {
 
     private User owner;
 
-    @NotNull(message = "Статус бронирования не может быть пустым")
+    @NotBlank(message = "Статус бронирования не может быть пустым")
     private Boolean available;
 
     private ItemRequest request;
 
 
-    public ItemDto(String name, String description, Boolean available, Long aLong) {
-
-    }
 }
