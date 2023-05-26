@@ -34,9 +34,4 @@ public class ItemDto {
     private Boolean available;
 
     private ItemRequest request;
-
-
-    public ItemDto(String name, String description, Boolean available, Long aLong) {
-
-    }
 }
