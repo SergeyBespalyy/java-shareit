@@ -11,6 +11,7 @@ import ru.practicum.shareit.user.dto.UserDto;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Класс описывает UserController с следующими энпоинтами
@@ -33,7 +34,7 @@ public class UserController {
     public UserDto create(@Valid @RequestBody UserDto user, BindingResult result) {
         log.info("Получен запрос к эндпоинту /users create");
         if (result.hasErrors()) {
-            String errorMessage = result.getFieldError("fieldName").getDefaultMessage();
+            String errorMessage = result.getFieldError().getDefaultMessage();
             log.warn(errorMessage);
             throw new ValidationException(errorMessage);
         }
@@ -54,7 +55,7 @@ public class UserController {
 
     @PatchMapping("/{id}")
     public UserDto update(@PathVariable("id") Long userId,
-                          @RequestBody UserDto dto,
+                          @RequestBody Map<Object, Object> fields,
                           BindingResult result) {
         log.info("Получен запрос к эндпоинту: /users update с id={}", userId);
         if (result.hasErrors()) {
@@ -62,7 +63,7 @@ public class UserController {
             log.warn(errorMessage);
             throw new ValidationException(errorMessage);
         }
-        return userService.update(userId, dto);
+        return userService.update(userId, fields);
     }
 
     @DeleteMapping("/{id}")
