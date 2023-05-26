@@ -11,7 +11,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.item.Item;
+import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.user.User;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -28,6 +32,8 @@ public class ItemTest {
     private final MockMvc mockMvc;
 
     private final ObjectMapper objectMapper;
+
+    private final ItemService itemService;
     private User user;
 
     @BeforeEach
@@ -40,7 +46,7 @@ public class ItemTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonUser));
 
-        Item item = new Item(1L, "Дрель", "Простая дрель", user, true, null);
+        Item item = new Item(1L, "Дрель", "Простая дрель", user, true);
         String jsonItem = objectMapper.writeValueAsString(item);
 
         Long userId = 1L;
@@ -53,7 +59,10 @@ public class ItemTest {
     @Test
     public void shouldGetItemById() throws Exception {
         Integer itemId = 1;
-        mockMvc.perform(get("/items/{id}", itemId))
+        Integer userId = 1;
+
+        mockMvc.perform(get("/items/{id}", itemId)
+                        .header("X-Sharer-User-Id", userId))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
@@ -64,7 +73,7 @@ public class ItemTest {
 
     @Test
     public void shouldItemWithoutXSharerUserId() throws Exception {
-        Item item = new Item(2L, "Дрель", "Простая дрель", user, true, null);
+        Item item = new Item(2L, "Дрель", "Простая дрель", user, true);
         String jsonItem = objectMapper.writeValueAsString(item);
 
         mockMvc.perform(post("/items")
@@ -75,7 +84,7 @@ public class ItemTest {
 
     @Test
     public void shouldItemWithNotFoundUser() throws Exception {
-        Item item = new Item(2L, "Дрель", "Простая дрель", user, true, null);
+        Item item = new Item(2L, "Дрель", "Простая дрель", user, true);
         String jsonItem = objectMapper.writeValueAsString(item);
         Long userId = 99L;
 
@@ -88,7 +97,7 @@ public class ItemTest {
 
     @Test
     public void shouldItemWithoutAvailable() throws Exception {
-        Item item = new Item(2L, "Дрель", "Простая дрель", user, null, null);
+        Item item = new Item(2L, "Дрель", "Простая дрель", user, null);
         String jsonItem = objectMapper.writeValueAsString(item);
         Long userId = 2L;
 
@@ -101,7 +110,7 @@ public class ItemTest {
 
     @Test
     public void shouldItemWitEmptyName() throws Exception {
-        Item item = new Item(2L, "", "Простая дрель", user, true, null);
+        Item item = new Item(2L, "", "Простая дрель", user, true);
         String jsonItem = objectMapper.writeValueAsString(item);
         Long userId = 2L;
 
@@ -114,7 +123,7 @@ public class ItemTest {
 
     @Test
     public void shouldItemWitEmptyDescription() throws Exception {
-        Item item = new Item(2L, "Дрель", "", user, true, null);
+        Item item = new Item(2L, "Дрель", "", user, true);
         String jsonItem = objectMapper.writeValueAsString(item);
         Long userId = 2L;
 
@@ -127,14 +136,20 @@ public class ItemTest {
 
     @Test
     public void shouldItemUpdate() throws Exception {
-        Item item = new Item(1L, "Дрель+", "Аккумуляторная дрель", user, false, null);
-        String jsonItem = objectMapper.writeValueAsString(item);
+
+        Long itemId = 1L;
         Long userId = 1L;
 
-        mockMvc.perform(patch("/items/1")
-                        .header("X-Sharer-User-Id", userId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonItem))
+        Map<Object, Object> fields = new HashMap<>();
+        fields.put( "name", "Дрель+");
+        fields.put( "description", "Аккумуляторная дрель");
+        fields.put( "available", false);
+
+        itemService.update(itemId, fields, userId);
+
+        mockMvc.perform(get("/items/{id}", itemId)
+                        .header("X-Sharer-User-Id", userId))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Дрель+"))
@@ -144,7 +159,7 @@ public class ItemTest {
 
     @Test
     public void shouldItemUpdateWithoutXSharerUserId() throws Exception {
-        Item item = new Item(1L, "Дрель+", "Аккумуляторная дрель", user, false, null);
+        Item item = new Item(1L, "Дрель+", "Аккумуляторная дрель", user, false);
         String jsonItem = objectMapper.writeValueAsString(item);
         Long userId = 1L;
 
@@ -156,7 +171,7 @@ public class ItemTest {
 
     @Test
     public void shouldItemUpdateWithUnckownUser() throws Exception {
-        Item item = new Item(1L, "Дрель+", "Аккумуляторная дрель", user, false, null);
+        Item item = new Item(1L, "Дрель+", "Аккумуляторная дрель", user, false);
         String jsonItem = objectMapper.writeValueAsString(item);
         Long userId = 99L;
 
@@ -169,13 +184,19 @@ public class ItemTest {
 
     @Test
     public void shouldItemUpdateAvailable() throws Exception {
-        String jsonItem = "{\"available\":\"false\"}";
+        Long itemId = 1L;
         Long userId = 1L;
 
-        mockMvc.perform(patch("/items/1")
-                        .header("X-Sharer-User-Id", userId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonItem))
+        Map<Object, Object> fields = new HashMap<>();
+        fields.put( "available", false);
+
+        itemService.update(itemId, fields, userId);
+
+        mockMvc.perform(get("/items/{id}", itemId)
+                        .header("X-Sharer-User-Id", userId))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Дрель"))
                 .andExpect(jsonPath("$.description").value("Простая дрель"))
                 .andExpect(jsonPath("$.available").value("false"));
@@ -220,7 +241,7 @@ public class ItemTest {
                 .andExpect(jsonPath("$[0].description").value("Простая дрель"))
                 .andExpect(jsonPath("$[0].available").value("true"));
 
-        Item item = new Item(2L, "Дрель+", "Аккумуляторная дрель", user, false, null);
+        Item item = new Item(2L, "Дрель+", "Аккумуляторная дрель", user, false);
         String jsonItem = objectMapper.writeValueAsString(item);
 
         User userNew = new User(2L, "userNew", "userNew@userNew.com");
@@ -260,7 +281,7 @@ public class ItemTest {
                 .andExpect(jsonPath("$[0].description").value("Простая дрель"))
                 .andExpect(jsonPath("$[0].available").value("true"));
 
-        Item item = new Item(2L, "Дрель+", "Аккумуляторная дрель", user, false, null);
+        Item item = new Item(2L, "Дрель+", "Аккумуляторная дрель", user, false);
         String jsonItem = objectMapper.writeValueAsString(item);
 
 
@@ -285,7 +306,7 @@ public class ItemTest {
         Long userId = 1L;
         String text = "аккУМУляторная";
 
-        Item item = new Item(2L, "Дрель+", "Аккумуляторная дрель", user, true, null);
+        Item item = new Item(2L, "Дрель+", "Аккумуляторная дрель", user, true);
         String jsonItem = objectMapper.writeValueAsString(item);
 
         mockMvc.perform(post("/items")
@@ -310,7 +331,7 @@ public class ItemTest {
         Long userId = 1L;
         String text = "дРелЬ";
 
-        Item item = new Item(2L, "Дрель+", "Аккумуляторная дрель", user, true, null);
+        Item item = new Item(2L, "Дрель+", "Аккумуляторная дрель", user, true);
         String jsonItem = objectMapper.writeValueAsString(item);
 
         mockMvc.perform(post("/items")
@@ -340,7 +361,7 @@ public class ItemTest {
         Long userId = 1L;
         String text = "";
 
-        Item item = new Item(2L, "Дрель+", "Аккумуляторная дрель", user, true, null);
+        Item item = new Item(2L, "Дрель+", "Аккумуляторная дрель", user, true);
         String jsonItem = objectMapper.writeValueAsString(item);
 
         mockMvc.perform(post("/items")
