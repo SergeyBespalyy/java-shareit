@@ -19,10 +19,8 @@ import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

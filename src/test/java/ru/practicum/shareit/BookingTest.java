@@ -10,10 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.booking.State;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.item.Item;
-import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
@@ -113,7 +111,7 @@ public class BookingTest {
     }
 
     @Test
-    public void  shouldBookingsUpdateWithUnckownUser() throws Exception {
+    public void shouldBookingsUpdateWithUnckownUser() throws Exception {
         Integer bookingId = 1;
         Integer userId = 100;
 
@@ -125,7 +123,7 @@ public class BookingTest {
     }
 
     @Test
-    public void  shouldBookingsUpdateWithUnckownBooking() throws Exception {
+    public void shouldBookingsUpdateWithUnckownBooking() throws Exception {
         Integer bookingId = 100;
         Integer userId = 1;
 
@@ -147,6 +145,7 @@ public class BookingTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
     }
+
     @Test
     public void shouldBookingsAllReservationForOwnerAll() throws Exception {
         Integer bookingId = 1;

@@ -141,9 +141,9 @@ public class ItemTest {
         Long userId = 1L;
 
         Map<Object, Object> fields = new HashMap<>();
-        fields.put( "name", "Дрель+");
-        fields.put( "description", "Аккумуляторная дрель");
-        fields.put( "available", false);
+        fields.put("name", "Дрель+");
+        fields.put("description", "Аккумуляторная дрель");
+        fields.put("available", false);
 
         itemService.update(itemId, fields, userId);
 
@@ -188,7 +188,7 @@ public class ItemTest {
         Long userId = 1L;
 
         Map<Object, Object> fields = new HashMap<>();
-        fields.put( "available", false);
+        fields.put("available", false);
 
         itemService.update(itemId, fields, userId);
 
