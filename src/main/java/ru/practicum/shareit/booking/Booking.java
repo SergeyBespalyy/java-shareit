@@ -37,10 +37,6 @@ public class Booking {
     private LocalDateTime end;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id", referencedColumnName = "user_id")
-    private User owner;
-
-    @ManyToOne
     @JoinColumn(name = "booker_id", referencedColumnName = "user_id")
     private User booker;
 

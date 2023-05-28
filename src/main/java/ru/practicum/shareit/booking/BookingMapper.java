@@ -25,7 +25,6 @@ public class BookingMapper {
                     .item(item)
                     .start(dto.getStart())
                     .end(dto.getEnd())
-                    .owner(item.getOwner())
                     .booker(booker)
                     .status(Status.WAITING)
                     .build();
