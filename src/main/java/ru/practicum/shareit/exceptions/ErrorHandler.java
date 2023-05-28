@@ -48,32 +48,30 @@ public class ErrorHandler {
         return new ErrorResponse("ValidationException", e.getMessage());
     }
 
-    @ExceptionHandler(ItemIsNotAvailableForBookingException.class)
+    @ExceptionHandler({MethodArgumentTypeMismatchException.class,
+            MissingServletRequestParameterException.class,
+            MissingRequestHeaderException.class,
+            ItemIsNotAvailableForBookingException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleValidationException(final ItemIsNotAvailableForBookingException e) {
-        log.warn("Ошибка ItemIsNotAvailableForBookingException {}", e.getMessage());
-        return new ErrorResponse("ItemIsNotAvailableForBookingException", e.getMessage());
-    }
-
-    @ExceptionHandler(MissingRequestHeaderException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMissingRequestHeaderException(final MissingRequestHeaderException e) {
+    public ErrorResponse handleMethodArgumentTypeMismatchExceptionD(Exception e) {
         log.warn("Ошибка ValidationException {}", e.getMessage());
-        return new ErrorResponse("MissingRequestHeaderException", e.getMessage());
-    }
+        String exceptionType;
+        String errorMessage;
 
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMissingServletRequestParameterException(final MissingServletRequestParameterException e) {
-        log.warn("Ошибка ValidationException {}", e.getMessage());
-        return new ErrorResponse("MissingServletRequestParameterException", e.getMessage());
-    }
+        if (e instanceof ItemIsNotAvailableForBookingException) {
+            exceptionType = "ItemIsNotAvailableForBookingException";
+        } else if (e instanceof MissingRequestHeaderException) {
+            exceptionType = "MissingRequestHeaderException";
+        } else if (e instanceof MissingServletRequestParameterException) {
+            exceptionType = "MissingServletRequestParameterException";
+        } else if (e instanceof MethodArgumentTypeMismatchException) {
+            exceptionType = "Unknown state: UNSUPPORTED_STATUS";
+        } else {
+            exceptionType = "Неизвестное исключение";
+        }
 
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMethodArgumentTypeMismatchException(final MethodArgumentTypeMismatchException e) {
-        log.warn("Ошибка ValidationException {}", e.getMessage());
-        return new ErrorResponse("Unknown state: UNSUPPORTED_STATUS");
+        errorMessage = e.getMessage();
+        return new ErrorResponse(exceptionType, errorMessage);
     }
 }
 
