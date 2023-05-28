@@ -49,7 +49,9 @@ public class ItemService {
     public List<ItemResponseDto> getAll(Long userId) {
         User user = UserMapper.toUser(service.getById(userId));
         List<Item> itemList = itemRepository.findAllByOwnerOrderById(user);
-        List<Booking> booking = bookingRepository.findAllByOwnerIdAndItemIn(userId, itemList);
+        List<Long> itemIdList = itemList.stream().map(Item::getId).collect(Collectors.toList());
+
+        List<Booking> booking = bookingRepository.findAllByOwnerIdAndItemIn(userId, itemIdList);
         List<Comment> comment = commentRepository.findAllByAndAuthorName(user.getName());
 
         return itemList.stream()
