@@ -52,7 +52,7 @@ public class BookingController {
                                            @RequestParam("approved") Boolean approved) {
         log.info("Получен запрос к эндпоинту /bookings updateStatus с headers {}, с bookingId {}, статус {}",
                 userId, bookingId, approved);
-        return bookingService.update(userId, bookingId, approved);
+        return bookingService.setApproved(userId, bookingId, approved);
     }
 
     @GetMapping("/{bookingId}")
@@ -66,13 +66,13 @@ public class BookingController {
     public List<BookingResponseDto> getAllReservation(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
                                                       @RequestParam(value = "state", required = false) State state) {
         log.info("Получен запрос к эндпоинту /bookings getAllReservation с state {}", state);
-        return bookingService.getAllReserve(userId, state);
+        return bookingService.getAllReserve(userId, state, "booker");
     }
 
     @GetMapping("/owner")
     public List<BookingResponseDto> getReservationForOwner(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
                                                            @RequestParam(value = "state", required = false) State state) {
         log.info("Получен запрос к эндпоинту /bookings getAllReservation с state {}", state);
-        return bookingService.getAllReserveForOwner(userId, state);
+        return bookingService.getAllReserve(userId, state, "owner");
     }
 }
