@@ -7,10 +7,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exceptions.ValidationException;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemResponseDto;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Класс описывает ItemController с следующими энпоинтами
@@ -19,6 +22,7 @@ import java.util.List;
  * - POST /items/ -  добавлять вещь в память
  * - PATCH /items/{id} - обновление вещи по id
  * - DELETE  /items/{id} - удаление вещи по id
+ * - POST /items/{itemId}/comment - Добавление отзывов  на вещь после того, как взяли её в аренду
  */
 
 @RestController
@@ -44,21 +48,22 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDto> getAll(@RequestHeader(name = "X-Sharer-User-Id") Long userId) {
+    public List<ItemResponseDto> getAll(@RequestHeader(name = "X-Sharer-User-Id") Long userId) {
         log.info("Получен запрос к эндпоинту: /items getAll с headers {}", userId);
         return itemService.getAll(userId);
     }
 
     @GetMapping("/{id}")
-    public ItemDto getById(@PathVariable("id") Long itemId) {
+    public ItemResponseDto getById(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
+                                   @PathVariable("id") Long itemId) {
         log.info("Получен запрос к эндпоинту: /items geById с id={}", itemId);
-        return itemService.getById(itemId);
+        return itemService.getById(itemId, userId);
     }
 
     @PatchMapping("/{id}")
     public ItemDto update(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
                           @PathVariable("id") Long itemId,
-                          @RequestBody ItemDto dto,
+                          @RequestBody Map<Object, Object> fields,
                           BindingResult result) {
         log.info("Получен запрос к эндпоинту: /items update с ItemId={} с headers {}", itemId, userId);
         if (result.hasErrors()) {
@@ -66,7 +71,7 @@ public class ItemController {
             log.warn(errorMessage);
             throw new ValidationException(errorMessage);
         }
-        return itemService.update(itemId, dto, userId);
+        return itemService.update(itemId, fields, userId);
     }
 
     @DeleteMapping("/{id}")
@@ -80,5 +85,19 @@ public class ItemController {
     public List<ItemDto> search(@RequestParam("text") String text) {
         log.info("Получен запрос к эндпоинту: items/search с text: {}", text);
         return itemService.search(text);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public Comment addComment(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
+                              @PathVariable("itemId") Long itemId,
+                              @Valid @RequestBody CommentDto comment,
+                              BindingResult result) {
+        log.info("Получен запрос к эндпоинту /items{itemId}/comment addComment с headers {}, с itemId {}", userId, itemId);
+        if (result.hasErrors()) {
+            String errorMessage = result.getFieldError("fieldName").getDefaultMessage();
+            log.warn(errorMessage);
+            throw new ValidationException(errorMessage);
+        }
+        return itemService.createComment(comment, userId, itemId);
     }
 }

@@ -4,21 +4,23 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.booking.dto.BookingDtoForItem;
+import ru.practicum.shareit.item.Comment;
 import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.User;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
- * Класс описывает модель ItemDto
+ * Класс описывает модель ItemResponseDto. Модель передается клиенту
  */
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ItemDto {
+public class ItemResponseDto {
 
     private Long id;
 
@@ -34,4 +36,11 @@ public class ItemDto {
     private Boolean available;
 
     private ItemRequest request;
+
+    private BookingDtoForItem lastBooking;
+
+    private BookingDtoForItem nextBooking;
+
+    private List<Comment> comments;
+
 }
