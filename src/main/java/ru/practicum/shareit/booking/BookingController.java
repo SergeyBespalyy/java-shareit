@@ -64,15 +64,19 @@ public class BookingController {
 
     @GetMapping
     public List<BookingResponseDto> getAllReservation(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
-                                                      @RequestParam(value = "state", required = false) State state) {
+                                                      @RequestParam(value = "state", required = false) State state,
+                                                      @RequestParam(name = "from", defaultValue = "0") Integer from,
+                                                      @RequestParam(name = "size", defaultValue = "10") Integer size) {
         log.info("Получен запрос к эндпоинту /bookings getAllReservation с state {}", state);
-        return bookingService.getAllReserve(userId, state, "booker");
+        return bookingService.getAllReserve(userId, state, "booker", from, size);
     }
 
     @GetMapping("/owner")
     public List<BookingResponseDto> getReservationForOwner(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
-                                                           @RequestParam(value = "state", required = false) State state) {
+                                                           @RequestParam(value = "state", required = false) State state,
+                                                           @RequestParam(name = "from", defaultValue = "0") Integer from,
+                                                           @RequestParam(name = "size", defaultValue = "10") Integer size) {
         log.info("Получен запрос к эндпоинту /bookings getAllReservation с state {}", state);
-        return bookingService.getAllReserve(userId, state, "owner");
+        return bookingService.getAllReserve(userId, state, "owner", from, size);
     }
 }
