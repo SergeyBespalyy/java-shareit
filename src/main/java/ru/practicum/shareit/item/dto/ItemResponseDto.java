@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingDtoForItem;
 import ru.practicum.shareit.item.Comment;
-import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.User;
 
 import javax.validation.constraints.NotBlank;
@@ -35,7 +34,7 @@ public class ItemResponseDto {
     @NotNull(message = "Статус бронирования не может быть пустым")
     private Boolean available;
 
-    private ItemRequest request;
+    private Long requestId;
 
     private BookingDtoForItem lastBooking;
 

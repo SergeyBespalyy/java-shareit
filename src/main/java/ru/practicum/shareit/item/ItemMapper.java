@@ -19,7 +19,6 @@ import java.util.Optional;
 
 public class ItemMapper {
     public static ItemDto toItemDto(Item item) {
-// TODO сделать с UserDto в поле owner
         return ItemDto
                 .builder()
                 .id(item.getId())
@@ -27,6 +26,7 @@ public class ItemMapper {
                 .description(item.getDescription())
                 .owner(item.getOwner())
                 .available(item.getAvailable())
+                .requestId(item.getRequestId())
                 .build();
     }
 
@@ -37,6 +37,7 @@ public class ItemMapper {
                 .description(dto.getDescription())
                 .available(dto.getAvailable())
                 .owner(user)
+                .requestId(dto.getRequestId())
                 .build();
     }
 
@@ -76,6 +77,7 @@ public class ItemMapper {
                 .lastBooking(bookingLast)
                 .nextBooking(bookingNext)
                 .comments(comment)
+                .requestId(item.getRequestId())
                 .build();
     }
 }
