@@ -24,14 +24,12 @@ public class Comment {
     @Column(name = "comment_id")
     private Long id;
 
-
     @Column(name = "text")
     private String text;
 
     @ManyToOne
     @JoinColumn(name = "item_id", referencedColumnName = "item_id")
     private Item item;
-
 
     @Column(name = "author_name")
     private String authorName;

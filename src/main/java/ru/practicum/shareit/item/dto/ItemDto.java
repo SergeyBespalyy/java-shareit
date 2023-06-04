@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.User;
 
 import javax.validation.constraints.NotBlank;
@@ -33,5 +32,5 @@ public class ItemDto {
     @NotNull(message = "Статус бронирования не может быть пустым")
     private Boolean available;
 
-    private ItemRequest request;
+    private Long requestId;
 }

@@ -40,6 +40,7 @@ public class Item {
     @NotNull(message = "Статус бронирования не может быть пустым")
     private Boolean available;
 
-//    private ItemRequest request;/
+    @Column(name = "request")
+    private Long requestId;
 
 }
