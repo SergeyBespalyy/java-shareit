@@ -57,7 +57,7 @@ public class BookingTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonOwner));
 
-        Item item = new Item(1L, "Дрель", "Простая дрель", owner, true);
+        Item item = new Item(1L, "Дрель", "Простая дрель", owner, true, null);
         String jsonItem = objectMapper.writeValueAsString(item);
 
         Long userId = 1L;
