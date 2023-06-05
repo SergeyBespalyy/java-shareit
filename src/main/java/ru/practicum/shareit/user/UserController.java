@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Map;
 
@@ -33,11 +32,6 @@ public class UserController {
     @PostMapping
     public UserDto create(@Valid @RequestBody UserDto user, BindingResult result) {
         log.info("Получен запрос к эндпоинту /users create");
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldError().getDefaultMessage();
-            log.warn(errorMessage);
-            throw new ValidationException(errorMessage);
-        }
         return userService.create(user);
     }
 
@@ -58,11 +52,6 @@ public class UserController {
                           @RequestBody Map<Object, Object> fields,
                           BindingResult result) {
         log.info("Получен запрос к эндпоинту: /users update с id={}", userId);
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldError("fieldName").getDefaultMessage();
-            log.warn(errorMessage);
-            throw new ValidationException(errorMessage);
-        }
         return userService.update(userId, fields);
     }
 
