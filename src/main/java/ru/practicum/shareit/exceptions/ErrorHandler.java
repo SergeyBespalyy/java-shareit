@@ -20,13 +20,6 @@ import java.sql.SQLException;
 @Slf4j
 public class ErrorHandler {
 
-    @ExceptionHandler(UserAlreadyExistException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleAlreadyExistExceptionUserOrFilm(final UserAlreadyExistException e) {
-        log.warn("Исключение UserAlreadyExistException {}", e.getMessage());
-        return new ErrorResponse(e.getMessage());
-    }
-
     @ExceptionHandler(ValidationIdException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleValidationIdException(final ValidationIdException e) {

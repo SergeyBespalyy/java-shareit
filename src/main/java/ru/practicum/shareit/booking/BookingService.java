@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.exceptions.ItemIsNotAvailableForBookingException;
-import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.exceptions.ValidationIdException;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.item.ItemRepository;
@@ -15,6 +14,7 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserMapper;
 import ru.practicum.shareit.user.UserService;
 
+import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
