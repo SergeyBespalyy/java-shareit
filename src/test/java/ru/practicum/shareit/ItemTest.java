@@ -377,4 +377,43 @@ public class ItemTest {
                 .andExpect(jsonPath("$", hasSize(0)));
 
     }
+
+    @Test
+    public void shouldDeleteItem() throws Exception {
+        Long userId = 1L;
+
+        Item item = new Item(2L, "Дрель+", "Аккумуляторная дрель", user, false, null);
+        String jsonItem = objectMapper.writeValueAsString(item);
+
+
+        mockMvc.perform(post("/items")
+                        .header("X-Sharer-User-Id", userId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonItem))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(delete("/items/{id}", 2L)
+                        .header("X-Sharer-User-Id", userId))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/items/{id}", 2L)
+                        .header("X-Sharer-User-Id", userId))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+
+    }
+
+    @Test
+    public void shouldCreateItemWithEmptyName() throws Exception {
+        Long userId = 1L;
+
+        Item item = new Item(2L, null, "Аккумуляторная дрель", user, false, null);
+        String jsonItem = objectMapper.writeValueAsString(item);
+
+        mockMvc.perform(post("/items")
+                        .header("X-Sharer-User-Id", userId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonItem))
+                .andExpect(status().is4xxClientError());
+    }
 }
