@@ -40,7 +40,7 @@ public class ItemRequestService {
     }
 
     public List<ItemRequestResponseDto> getOtherUsers(Long userId, Integer from, Integer size) {
-        if (size <= 0 || from <0){
+        if (size <= 0 || from < 0) {
             throw new ValidationException("size или from должен быть больше 0");
         }
         userService.getById(userId);
@@ -69,6 +69,6 @@ public class ItemRequestService {
         ItemRequest itemRequest = requestRepository.findById(requestId)
                 .orElseThrow(() -> new ValidationIdException("Запрос не найден"));
         List<Item> items = itemRepository.findAllByRequestIdIn(List.of(itemRequest.getId()));
-        return  ItemRequestMapper.toItemRequestResponseDto(itemRequest, items);
+        return ItemRequestMapper.toItemRequestResponseDto(itemRequest, items);
     }
 }

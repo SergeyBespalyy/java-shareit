@@ -86,7 +86,7 @@ public class BookingService {
             state = State.ALL;
         }
 
-        if (size <= 0 || from <0){
+        if (size <= 0 || from < 0) {
             throw new javax.validation.ValidationException("size или from должен быть больше 0");
         }
         PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size);

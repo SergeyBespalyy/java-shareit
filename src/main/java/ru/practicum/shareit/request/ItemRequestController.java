@@ -53,7 +53,7 @@ public class ItemRequestController {
     }
 
     @GetMapping
-    public List<ItemRequestResponseDto> getForUser(@RequestHeader(name = "X-Sharer-User-Id") Long userId){
+    public List<ItemRequestResponseDto> getForUser(@RequestHeader(name = "X-Sharer-User-Id") Long userId) {
         log.info("Получен запрос к эндпоинту /requests getForUser с headers {}", userId);
         return requestService.getForUser(userId);
     }
@@ -61,14 +61,14 @@ public class ItemRequestController {
     @GetMapping("/all")
     public List<ItemRequestResponseDto> getOtherUsers(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
                                                       @RequestParam(name = "from", defaultValue = "0") Integer from,
-                                                      @RequestParam(name = "size", defaultValue = "10") Integer size){
+                                                      @RequestParam(name = "size", defaultValue = "10") Integer size) {
         log.info("Получен запрос к эндпоинту /requests getOtherUsers с headers {}, from{}, size{}", userId, from, size);
         return requestService.getOtherUsers(userId, from, size);
     }
 
     @GetMapping("/{requestId}")
     public ItemRequestResponseDto getRequestById(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
-                                                      @PathVariable(name = "requestId") Long requestId){
+                                                 @PathVariable(name = "requestId") Long requestId) {
         log.info("Получен запрос к эндпоинту /requests getOtherUsers с headers {}, c requestId {}", userId, requestId);
         return requestService.getRequestById(userId, requestId);
     }
