@@ -11,7 +11,6 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemResponseDto;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Map;
 
@@ -36,14 +35,9 @@ public class ItemController {
 
     @PostMapping
     public ItemDto create(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
-                          @Valid @RequestBody ItemDto dto,
+                          @RequestBody @Valid ItemDto dto,
                           BindingResult result) {
         log.info("Получен запрос к эндпоинту /items create с headers {}", userId);
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldError("fieldName").getDefaultMessage();
-            log.warn(errorMessage);
-            throw new ValidationException(errorMessage);
-        }
         return itemService.create(dto, userId);
     }
 
@@ -66,18 +60,14 @@ public class ItemController {
                           @RequestBody Map<Object, Object> fields,
                           BindingResult result) {
         log.info("Получен запрос к эндпоинту: /items update с ItemId={} с headers {}", itemId, userId);
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldError("fieldName").getDefaultMessage();
-            log.warn(errorMessage);
-            throw new ValidationException(errorMessage);
-        }
+
         return itemService.update(itemId, fields, userId);
     }
 
     @DeleteMapping("/{id}")
-    public HttpStatus delete(@PathVariable("id") Long userId) {
-        log.info("Получен запрос к эндпоинту: /items delete с id={}", userId);
-        itemService.delete(userId);
+    public HttpStatus delete(@PathVariable("id") Long itemId) {
+        log.info("Получен запрос к эндпоинту: /items delete с id={}", itemId);
+        itemService.delete(itemId);
         return HttpStatus.OK;
     }
 
@@ -93,11 +83,7 @@ public class ItemController {
                               @Valid @RequestBody CommentDto comment,
                               BindingResult result) {
         log.info("Получен запрос к эндпоинту /items{itemId}/comment addComment с headers {}, с itemId {}", userId, itemId);
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldError("fieldName").getDefaultMessage();
-            log.warn(errorMessage);
-            throw new ValidationException(errorMessage);
-        }
+
         return itemService.createComment(comment, userId, itemId);
     }
 }
