@@ -92,9 +92,9 @@ public class JsonDtoTests {
         LocalDateTime start = LocalDateTime.now().withNano(000000);
         LocalDateTime end = LocalDateTime.now().withNano(000000).plusDays(1);
 
-        BookingDtoForItem BookingDtoForItemNew = new BookingDtoForItem(1L, start, end, 2L, Status.APPROVED);
+        BookingDtoForItem bookingDtoForItemNew = new BookingDtoForItem(1L, start, end, 2L, Status.APPROVED);
 
-        JsonContent<BookingDtoForItem> result = jsonBookingDtoForItem.write(BookingDtoForItemNew);
+        JsonContent<BookingDtoForItem> result = jsonBookingDtoForItem.write(bookingDtoForItemNew);
 
         assertThat(result).extractingJsonPathNumberValue("$.id").isEqualTo(1);
         assertThat(result).extractingJsonPathNumberValue("$.bookerId").isEqualTo(2);
