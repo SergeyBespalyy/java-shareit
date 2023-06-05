@@ -12,6 +12,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.item.Item;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
@@ -111,6 +112,49 @@ public class BookingTest {
     }
 
     @Test
+    public void shouldBookingsUpdateUserWithoutBooking() throws Exception {
+        Integer bookingId = 99;
+        Integer userId = 1;
+
+        mockMvc.perform(patch("/bookings/{bookingId}?approved=true", bookingId)
+                        .header("X-Sharer-User-Id", userId))
+                .andExpect(status().is4xxClientError());
+
+    }
+
+    @Test
+    public void shouldBookingsUpdateUserWithApproved() throws Exception {
+        Integer bookingId = 1;
+        Integer userId = 1;
+
+        mockMvc.perform(patch("/bookings/{bookingId}?approved=true", bookingId)
+                        .header("X-Sharer-User-Id", userId))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(patch("/bookings/{bookingId}?approved=true", bookingId)
+                        .header("X-Sharer-User-Id", userId))
+                .andExpect(status().is4xxClientError());
+
+    }
+
+    @Test
+    public void shouldBookingsUpdateWithApprovedFalse() throws Exception {
+        Integer bookingId = 1;
+        Integer userId = 1;
+
+        mockMvc.perform(patch("/bookings/{bookingId}?approved=false", bookingId)
+                        .header("X-Sharer-User-Id", userId))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/bookings/{id}", bookingId)
+                        .header("X-Sharer-User-Id", userId))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("REJECTED"));
+
+    }
+
+    @Test
     public void shouldBookingsUpdateWithUnckownUser() throws Exception {
         Integer bookingId = 1;
         Integer userId = 100;
@@ -147,6 +191,42 @@ public class BookingTest {
     }
 
     @Test
+    public void shouldBookingsAllReservationFuture() throws Exception {
+        Integer bookingId = 1;
+        Integer userId = 2;
+
+        mockMvc.perform(get("/bookings?state=FUTURE", bookingId)
+                        .header("X-Sharer-User-Id", userId))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+    @Test
+    public void shouldBookingsAllReservationWAITING() throws Exception {
+        Integer bookingId = 1;
+        Integer userId = 2;
+
+        mockMvc.perform(get("/bookings?state=WAITING", bookingId)
+                        .header("X-Sharer-User-Id", userId))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+    @Test
+    public void shouldBookingsAllReservationREJECTED() throws Exception {
+        Integer bookingId = 1;
+        Integer userId = 2;
+
+        mockMvc.perform(get("/bookings?state=REJECTED", bookingId)
+                        .header("X-Sharer-User-Id", userId))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+
+
+    @Test
     public void shouldBookingsAllReservationForOwnerAll() throws Exception {
         Integer bookingId = 1;
         Integer userId = 1;
@@ -156,6 +236,39 @@ public class BookingTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+    @Test
+    public void shouldBookingsAllReservationForOwnerFUTURE() throws Exception {
+        Integer bookingId = 1;
+        Integer userId = 1;
+
+        mockMvc.perform(get("/bookings/owner?state=FUTURE", bookingId)
+                        .header("X-Sharer-User-Id", userId))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+    @Test
+    public void shouldBookingsAllReservationForOwnerWaiting() throws Exception {
+        Integer bookingId = 1;
+        Integer userId = 1;
+
+        mockMvc.perform(get("/bookings/owner?state=WAITING", bookingId)
+                        .header("X-Sharer-User-Id", userId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+    @Test
+    public void shouldBookingsAllReservationForOwnerREJECTED() throws Exception {
+        Integer bookingId = 1;
+        Integer userId = 1;
+
+        mockMvc.perform(get("/bookings/owner?state=REJECTED", bookingId)
+                        .header("X-Sharer-User-Id", userId))
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -170,11 +283,142 @@ public class BookingTest {
     }
 
     @Test
+    public void shouldBookingsAllReservationCURRENT() throws Exception {
+        Integer bookingId = 1;
+        Integer userId = 2;
+
+        mockMvc.perform(get("/bookings?state=CURRENT", bookingId)
+                        .header("X-Sharer-User-Id", userId))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
     public void shouldBookingsAllReservationForOwnerPAST() throws Exception {
         Integer bookingId = 1;
         Integer userId = 1;
 
         mockMvc.perform(get("/bookings/owner?state=PAST", bookingId)
+                        .header("X-Sharer-User-Id", userId))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void shouldBookingsAllReservationForOwnerCURRENT() throws Exception {
+        Integer bookingId = 1;
+        Integer userId = 1;
+
+        mockMvc.perform(get("/bookings/owner?state=CURRENT", bookingId)
+                        .header("X-Sharer-User-Id", userId))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void shouldBookingsAllReservationUnsupportedStatus() throws Exception {
+        Integer bookingId = 1;
+        Integer userId = 1;
+
+        mockMvc.perform(get("/bookings/owner?state=PASTPast", bookingId)
+                        .header("X-Sharer-User-Id", userId))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void shouldBookingCreateWitchFalseData() throws Exception {
+
+        Long bookerId = 2L;
+        start = LocalDateTime.now().plusHours(1);
+        end = start.minusMinutes(30);
+
+        bookingDto = new BookingDto(1L, 1L, start, end, null);
+        String jsonBooking = objectMapper.writeValueAsString(bookingDto);
+
+        mockMvc.perform(post("/bookings")
+                        .header("X-Sharer-User-Id", bookerId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonBooking))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void shouldBookingCreateWitchEmptyData() throws Exception {
+
+        Long bookerId = 2L;
+
+        bookingDto = new BookingDto(1L, 1L, null, null, null);
+        String jsonBooking = objectMapper.writeValueAsString(bookingDto);
+
+        mockMvc.perform(post("/bookings")
+                        .header("X-Sharer-User-Id", bookerId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonBooking))
+                .andExpect(status().is4xxClientError());
+    }
+
+
+    @Test
+    public void shouldBookingCreateWitchFalseAvialable() throws Exception {
+
+        Long bookerId = 2L;
+        start = LocalDateTime.now().plusMinutes(1);
+        end = start.plusDays(1);
+
+        Item item = new Item(2L, "Дрель++", "Простая дрель++", owner, false, null);
+        String jsonItem = objectMapper.writeValueAsString(item);
+
+        Long userId = 1L;
+        mockMvc.perform(post("/items")
+                .header("X-Sharer-User-Id", userId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonItem));
+
+        bookingDto = new BookingDto(1L, 2L, start, end, null);
+        String jsonBooking = objectMapper.writeValueAsString(bookingDto);
+
+        mockMvc.perform(post("/bookings")
+                        .header("X-Sharer-User-Id", bookerId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonBooking))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void shouldBookingCreateWithFalseUserEqualsOwner() throws Exception {
+
+        Long bookerId = 1L;
+        start = LocalDateTime.now().plusMinutes(1);
+        end = start.plusDays(1);
+
+        bookingDto = new BookingDto(1L, 1L, start, end, null);
+        String jsonBooking = objectMapper.writeValueAsString(bookingDto);
+
+        mockMvc.perform(post("/bookings")
+                        .header("X-Sharer-User-Id", bookerId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonBooking))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void shouldBookingsWithoutSizeMinus() throws Exception {
+        Integer bookingId = 1;
+        Integer userId = 1;
+
+        mockMvc.perform(get("/bookings/owner?size=-1&from=0", bookingId)
+                        .header("X-Sharer-User-Id", userId))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void shouldBookingsWithoutFromMinus() throws Exception {
+        Integer bookingId = 1;
+        Integer userId = 1;
+
+        mockMvc.perform(get("/bookings/owner?size=10&from=-1", bookingId)
                         .header("X-Sharer-User-Id", userId))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
