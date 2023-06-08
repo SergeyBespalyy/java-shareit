@@ -9,7 +9,8 @@ import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 /**
@@ -40,15 +41,10 @@ public class ItemRequestController {
     private final ItemRequestService requestService;
 
     @PostMapping
-    public ItemRequestResponseDto create(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
+    public ItemRequestResponseDto create(@RequestHeader(name = "X-Sharer-User-Id") @Positive Long userId,
                                          @Valid @RequestBody ItemRequestDto dto,
                                          BindingResult result) {
         log.info("Получен запрос к эндпоинту /requests create с headers {}", userId);
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldError("fieldName").getDefaultMessage();
-            log.warn(errorMessage);
-            throw new ValidationException(errorMessage);
-        }
         return requestService.create(dto, userId);
     }
 
@@ -60,8 +56,8 @@ public class ItemRequestController {
 
     @GetMapping("/all")
     public List<ItemRequestResponseDto> getOtherUsers(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
-                                                      @RequestParam(name = "from", defaultValue = "0") Integer from,
-                                                      @RequestParam(name = "size", defaultValue = "10") Integer size) {
+                                                      @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero Integer from,
+                                                      @RequestParam(name = "size", defaultValue = "10") @Positive Integer size) {
         log.info("Получен запрос к эндпоинту /requests getOtherUsers с headers {}, from{}, size{}", userId, from, size);
         return requestService.getOtherUsers(userId, from, size);
     }
