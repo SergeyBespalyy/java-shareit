@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +57,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public HttpStatus delete(@PathVariable("id") Long userId) {
+    public HttpStatus delete(@PathVariable("id") @Positive Long userId) {
         log.info("Получен запрос к эндпоинту: /users delete с id={}", userId);
         userService.delete(userId);
         return HttpStatus.OK;
