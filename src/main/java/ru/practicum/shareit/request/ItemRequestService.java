@@ -5,14 +5,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exceptions.ValidationIdException;
 import ru.practicum.shareit.item.Item;
+import ru.practicum.shareit.item.ItemMapper;
 import ru.practicum.shareit.item.ItemRepository;
+import ru.practicum.shareit.item.dto.ItemDtoShort;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
 import ru.practicum.shareit.user.UserService;
 
-import javax.validation.ValidationException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -40,9 +40,6 @@ public class ItemRequestService {
     }
 
     public List<ItemRequestResponseDto> getOtherUsers(Long userId, Integer from, Integer size) {
-        if (size <= 0 || from < 0) {
-            throw new ValidationException("size или from должен быть больше 0");
-        }
         userService.getById(userId);
         PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size);
         List<ItemRequest> itemRequests = requestRepository.findAllByRequestorIsNotOrderByCreatedDesc(userId, page);
@@ -54,14 +51,13 @@ public class ItemRequestService {
                 itemRequests.stream()
                         .map(ItemRequest::getId)
                         .collect(Collectors.toList()));
+        List<ItemDtoShort> itemDtoShorts = items.stream().map(ItemMapper::toItemDtoShort).collect(Collectors.toList());
 
+        Map<Long, List<ItemDtoShort>> itemsList = itemDtoShorts.stream().collect(Collectors.groupingBy(ItemDtoShort::getRequestId, Collectors.toList()));
 
         return itemRequests.stream()
                 .map(itemRequest -> ItemRequestMapper.toItemRequestResponseDto(
-                        itemRequest, items.stream()
-                                .filter(item -> item.getRequestId().equals(itemRequest.getId()))
-                                .collect(Collectors.toList())))
-                .collect(Collectors.toList());
+                        itemRequest, itemsList.getOrDefault(itemRequest.getId(), Collections.emptyList()))).collect(Collectors.toList());
     }
 
     public ItemRequestResponseDto getRequestById(Long userId, Long requestId) {
@@ -69,6 +65,8 @@ public class ItemRequestService {
         ItemRequest itemRequest = requestRepository.findById(requestId)
                 .orElseThrow(() -> new ValidationIdException("Запрос не найден"));
         List<Item> items = itemRepository.findAllByRequestIdIn(List.of(itemRequest.getId()));
-        return ItemRequestMapper.toItemRequestResponseDto(itemRequest, items);
+        List<ItemDtoShort> itemDtoShorts = items.stream().map(ItemMapper::toItemDtoShort).collect(Collectors.toList());
+
+        return ItemRequestMapper.toItemRequestResponseDto(itemRequest, itemDtoShorts);
     }
 }
