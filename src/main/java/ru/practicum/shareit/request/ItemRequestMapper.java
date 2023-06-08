@@ -1,6 +1,7 @@
 package ru.practicum.shareit.request;
 
-import ru.practicum.shareit.item.Item;
+import lombok.experimental.UtilityClass;
+import ru.practicum.shareit.item.dto.ItemDtoShort;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
 
@@ -11,8 +12,9 @@ import java.util.List;
  * Класс описывает ItemRequestMapper, переводит ItemRequest в ДТО и обратно
  */
 
+@UtilityClass
 public class ItemRequestMapper {
-    public static ItemRequest toItemRequest(ItemRequestDto dto, Long userId) {
+    public ItemRequest toItemRequest(ItemRequestDto dto, Long userId) {
         return ItemRequest.builder()
                 .description(dto.getDescription())
                 .created(LocalDateTime.now())
@@ -20,7 +22,7 @@ public class ItemRequestMapper {
                 .build();
     }
 
-    public static ItemRequestResponseDto toItemRequestResponseDto(ItemRequest itemRequest, List<Item> items) {
+    public ItemRequestResponseDto toItemRequestResponseDto(ItemRequest itemRequest, List<ItemDtoShort> items) {
         return ItemRequestResponseDto.builder()
                 .id(itemRequest.getId())
                 .description(itemRequest.getDescription())
