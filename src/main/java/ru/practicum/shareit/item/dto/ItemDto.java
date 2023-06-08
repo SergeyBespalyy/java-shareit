@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * Класс описывает модель ItemDto
+ * Класс описывает модель ItemDto, получаемую от клиента
  */
 
 @Data
