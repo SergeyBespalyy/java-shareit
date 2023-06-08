@@ -1,6 +1,8 @@
 package ru.practicum.shareit.item;
 
+import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentResponseDto;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
@@ -9,8 +11,9 @@ import java.time.LocalDateTime;
  * Класс описывает CommentMapper, переводит Comment в ДТО и обратно
  */
 
+@UtilityClass
 public class CommentMapper {
-    public static CommentDto toCommentDto(Comment comment, User author) {
+    public CommentDto toCommentDto(Comment comment, User author) {
         return CommentDto
                 .builder()
                 .id(comment.getId())
@@ -20,12 +23,25 @@ public class CommentMapper {
                 .build();
     }
 
-    public static Comment toComment(CommentDto dto, User author, Item item) {
+    public Comment toComment(CommentDto dto, User author, Item item) {
         return Comment.builder()
                 .authorName(author.getName())
                 .created(LocalDateTime.now())
                 .text(dto.getText())
                 .item(item)
+                .build();
+    }
+
+    public CommentResponseDto toCommentResponseDto(Comment comment) {
+        return CommentResponseDto
+                .builder()
+                .id(comment.getId())
+                .authorName(comment.getAuthorName())
+                .created(LocalDateTime.now())
+                .text(comment.getText())
+                .item(new CommentResponseDto.Item(
+                        comment.getItem().getId(),
+                        comment.getItem().getName()))
                 .build();
     }
 }
