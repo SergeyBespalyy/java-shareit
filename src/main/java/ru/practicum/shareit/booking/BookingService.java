@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.exceptions.ItemIsNotAvailableForBookingException;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Service
 @Transactional(readOnly = true)
+@Validated
 public class BookingService {
 
     private final BookingRepository bookingRepository;
@@ -82,13 +84,6 @@ public class BookingService {
     }
 
     public List<BookingResponseDto> getAllReserve(Long userId, State state, String typeUser, int from, int size) {
-        if (state == null) {
-            state = State.ALL;
-        }
-
-        if (size <= 0 || from < 0) {
-            throw new javax.validation.ValidationException("size или from должен быть больше 0");
-        }
         PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size);
 
         List<Booking> list;
