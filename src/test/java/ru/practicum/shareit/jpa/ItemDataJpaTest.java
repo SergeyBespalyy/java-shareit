@@ -1,9 +1,12 @@
-package ru.practicum.shareit;
+package ru.practicum.shareit.jpa;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import ru.practicum.shareit.item.Item;
+import ru.practicum.shareit.item.ItemRepository;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.User;
@@ -14,13 +17,13 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-public class ItemRequestDataJpaTest {
+public class ItemDataJpaTest {
 
     @Autowired
     private TestEntityManager entityManager;
 
     @Autowired
-    private ItemRequestRepository requestRepository;
+    private ItemRepository itemRepository;
     @Autowired
 
     private UserRepository userRepository;
@@ -32,18 +35,13 @@ public class ItemRequestDataJpaTest {
         User user = new User(1L, "John Doe", "johndoe@example.com");
         User savedUser = userRepository.save(user);
 
-        ItemRequest itemRequest = ItemRequest.builder()
-                .description("Описание для запроса вещи")
-                .created(time)
-                .requestor(savedUser.getId())
-                .build();
+        Item item =  new Item(1L, "Веник", "Домашний", savedUser, true, null);
+        Item savedItem = itemRepository.save(item);
 
-        ItemRequest savedItemRequest = requestRepository.save(itemRequest);
+        Long savedItemId = savedItem.getId();
 
-        Long itemRequestId = savedItemRequest.getId();
+        Item retrievedItem = entityManager.find(Item.class, savedItemId);
 
-        ItemRequest retrievedItemRequest = entityManager.find(ItemRequest.class, itemRequestId);
-
-        assertThat(retrievedItemRequest).isEqualTo(savedItemRequest);
+        assertThat(retrievedItem).isEqualTo(savedItem);
     }
 }
