@@ -1,15 +1,8 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.practicum.shareit.booking.dto.BookingDtoForItem;
-import ru.practicum.shareit.item.Comment;
-import ru.practicum.shareit.user.User;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -22,24 +15,21 @@ import java.util.List;
 public class ItemResponseDto {
 
     private Long id;
-
-    @NotBlank(message = "Имя не может быть пустым")
     private String name;
-
-    @NotBlank(message = "Описание не может быть пустым")
     private String description;
-
-    private User owner;
-
-    @NotNull(message = "Статус бронирования не может быть пустым")
+    private Owner owner;
     private Boolean available;
-
     private Long requestId;
-
     private BookingDtoForItem lastBooking;
-
     private BookingDtoForItem nextBooking;
+    private List<CommentResponseDto> comments;
 
-    private List<Comment> comments;
-
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Owner {
+        private long id;
+        private String name;
+    }
 }
