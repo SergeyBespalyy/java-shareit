@@ -1,6 +1,7 @@
 package ru.practicum.shareit.exceptions;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -9,8 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import javax.validation.ValidationException;
-import java.sql.SQLException;
+import javax.validation.ConstraintViolationException;
 
 /**
  * Класс описывающий ErrorHandler для централизованной обработки ошибок.
@@ -27,27 +27,28 @@ public class ErrorHandler {
         return new ErrorResponse("ValidationIdException", e.getMessage());
     }
 
-    @ExceptionHandler(SQLException.class)
+    @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleSqlExceptionHelper(final SQLException e) {
-        log.warn("Ошибка ValidationException {}", e.getMessage());
-        return new ErrorResponse(e.getSQLState(), e.getMessage());
+    public ErrorResponse handleSqlException(final DataIntegrityViolationException e) {
+        log.warn("Ошибка DataIntegrityViolationException {}", e.getMessage());
+        return new ErrorResponse(e.getClass().getSimpleName(), e.getMessage());
     }
 
-    @ExceptionHandler(ValidationException.class)
+    @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleValidationException(final ValidationException e) {
-        log.warn("Ошибка ValidationException {}", e.getMessage());
-        return new ErrorResponse("ValidationException", e.getMessage());
+    public ErrorResponse handleConstraintViolationException(final ConstraintViolationException e) {
+        log.warn("Ошибка ConstraintViolationException {}", e.getMessage());
+        return new ErrorResponse(e.getClass().getSimpleName(), e.getMessage());
     }
 
     @ExceptionHandler({MethodArgumentTypeMismatchException.class,
             MissingServletRequestParameterException.class,
             MissingRequestHeaderException.class,
-            ItemIsNotAvailableForBookingException.class})
+            ItemIsNotAvailableForBookingException.class
+    })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMethodArgumentTypeMismatchExceptionD(Exception e) {
-        log.warn("Ошибка ValidationException {}", e.getMessage());
+        log.warn("Ошибка {}, описание: {}", e.getClass(), e.getMessage());
         String exceptionType;
         String errorMessage;
 
@@ -62,10 +63,17 @@ public class ErrorHandler {
         } else {
             exceptionType = "Неизвестное исключение";
         }
-
         errorMessage = e.getMessage();
         return new ErrorResponse(exceptionType, errorMessage);
     }
+
+    @ExceptionHandler(Throwable.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleThrowableException(final Throwable e) {
+        log.warn("Ошибка Throwable {}", e.getMessage());
+        return new ErrorResponse("ValidationException", e.getMessage());
+    }
+
 }
 
 
