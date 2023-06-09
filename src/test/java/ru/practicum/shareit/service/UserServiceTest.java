@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.user.User;
@@ -15,6 +16,7 @@ import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.dto.UserDto;
 
+import javax.validation.ConstraintViolationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
         "spring.config.location=classpath:application-test.properties"
 }, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class UserServiceTest {
     private final UserService userService;
     private final UserRepository userRepository;
@@ -50,6 +53,22 @@ class UserServiceTest {
         assertNotNull(createdUser);
         assertEquals(userDto.getEmail(), createdUser.getEmail());
         assertEquals(userDto.getName(), createdUser.getName());
+    }
+
+    @Test
+    public void testCreateUserDuplucateEmail() {
+        UserDto userDto = new UserDto();
+        userDto.setEmail("test@test.com");
+        userDto.setName("Test tes");
+
+        UserDto userDtoDuplicate = new UserDto();
+        userDto.setEmail("test@test.com");
+        userDto.setName("Test tes");
+
+        UserDto createdUserDto = userService.create(userDto);
+        assertThrows(ConstraintViolationException.class, () -> {
+            userService.create(userDtoDuplicate);
+        });
     }
 
     @Test

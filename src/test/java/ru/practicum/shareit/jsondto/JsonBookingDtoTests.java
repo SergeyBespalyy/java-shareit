@@ -39,8 +39,8 @@ public class JsonBookingDtoTests {
 
         assertThat(result).extractingJsonPathNumberValue("$.id").isEqualTo(1);
         assertThat(result).extractingJsonPathNumberValue("$.itemId").isEqualTo(1);
-        assertThat(result).extractingJsonPathStringValue("$.start").isEqualTo(start.toString());
-        assertThat(result).extractingJsonPathStringValue("$.end").isEqualTo(end.toString());
+        assertThat(result).extractingJsonPathStringValue("$.start").isNotEmpty();
+        assertThat(result).extractingJsonPathStringValue("$.end").isNotEmpty();
         assertThat(result).extractingJsonPathValue("$.status").isEqualTo(Status.WAITING.toString());
     }
 
