@@ -38,11 +38,7 @@ public class JsonItemRequestDtoTests {
     void testItemRequestResponseDto() throws Exception {
         LocalDateTime time = LocalDateTime.now().withNano(000000);
 
-        ItemRequestResponseDto itemRequestResponseDto = new ItemRequestResponseDto(
-                2L,
-                "Отвертка с ручкой",
-                time,
-                new ArrayList<>());
+        ItemRequestResponseDto itemRequestResponseDto = new ItemRequestResponseDto(2L, "Отвертка с ручкой", time, new ArrayList<>());
         JsonContent<ItemRequestResponseDto> result = jsonResponse.write(itemRequestResponseDto);
 
         assertThat(result).extractingJsonPathNumberValue("$.id").isEqualTo(2);

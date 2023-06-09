@@ -6,9 +6,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.item.ItemRepository;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.request.ItemRequest;
-import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 
@@ -35,7 +32,7 @@ public class ItemDataJpaTest {
         User user = new User(1L, "John Doe", "johndoe@example.com");
         User savedUser = userRepository.save(user);
 
-        Item item =  new Item(1L, "Веник", "Домашний", savedUser, true, null);
+        Item item = new Item(1L, "Веник", "Домашний", savedUser, true, null);
         Item savedItem = itemRepository.save(item);
 
         Long savedItemId = savedItem.getId();
