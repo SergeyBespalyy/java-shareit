@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -26,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
         "spring.config.location=classpath:application-test.properties"
 }, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class BookingServiceTest {
 
     private final BookingRepository bookingRepository;
@@ -62,7 +64,6 @@ class BookingServiceTest {
         bookingDto.setItemId(item.getId());
 
         BookingResponseDto bookingResponseDto = bookingService.create(bookingDto, booker.getId());
-
 
         assertNotNull(bookingResponseDto.getId());
         assertEquals(bookingDto.getStart(), bookingResponseDto.getStart());
