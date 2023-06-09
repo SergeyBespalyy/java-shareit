@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
-import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
@@ -20,9 +19,6 @@ public class UserDataJpaTest {
 
     @Autowired
     private TestEntityManager entityManager;
-
-    @Autowired
-    private ItemRepository itemRepository;
     @Autowired
 
     private UserRepository userRepository;

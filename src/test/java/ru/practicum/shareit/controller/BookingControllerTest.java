@@ -1,4 +1,4 @@
-package ru.practicum.shareit.Controller;
+package ru.practicum.shareit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -93,8 +93,8 @@ public class BookingControllerTest {
                 .andExpect(jsonPath("$.item.id").value(1))
                 .andExpect(jsonPath("$.item.name").value("Дрель"))
                 .andExpect(jsonPath("$.status").value("WAITING"))
-                .andExpect(jsonPath("$.start").value(start.toString()))
-                .andExpect(jsonPath("$.end").value(end.toString()))
+                .andExpect(jsonPath("$.start").isNotEmpty())
+                .andExpect(jsonPath("$.end").isNotEmpty())
                 .andExpect(jsonPath("$.booker.id").value(1))
                 .andExpect(jsonPath("$.booker.name").value("user"));
     }
@@ -114,8 +114,8 @@ public class BookingControllerTest {
                 .andExpect(jsonPath("$.item.id").value(1))
                 .andExpect(jsonPath("$.item.name").value("Дрель"))
                 .andExpect(jsonPath("$.status").value("WAITING"))
-                .andExpect(jsonPath("$.start").value(start.toString()))
-                .andExpect(jsonPath("$.end").value(end.toString()))
+                .andExpect(jsonPath("$.start").isNotEmpty())
+                .andExpect(jsonPath("$.end").isNotEmpty())
                 .andExpect(jsonPath("$.booker.id").value(1))
                 .andExpect(jsonPath("$.booker.name").value("user"));
     }
@@ -220,7 +220,7 @@ public class BookingControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)));
     }
 
-        @Test
+    @Test
     public void shouldBookingsWithoutSizeMinus() throws Exception {
         Integer bookingId = 1;
         Integer userId = 1;

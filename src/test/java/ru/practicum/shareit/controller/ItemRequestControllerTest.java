@@ -1,4 +1,4 @@
-package ru.practicum.shareit.Controller;
+package ru.practicum.shareit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -7,13 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.booking.BookingController;
-import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.request.ItemRequestController;
 import ru.practicum.shareit.request.ItemRequestService;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
@@ -25,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -95,7 +90,6 @@ public class ItemRequestControllerTest {
         mockMvc.perform(get("/requests"))
                 .andExpect(status().is4xxClientError());
     }
-
 
 
     @Test
@@ -173,17 +167,6 @@ public class ItemRequestControllerTest {
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.description").value("Хотел бы воспользоваться щёткой для обуви"))
                 .andExpect(jsonPath("$.items", hasSize(0)));
-
-//        mockMvc.perform(get("/requests")
-//                        .header("X-Sharer-User-Id", userId))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$", hasSize(1)))
-//                .andExpect(jsonPath("$[0].id").value(1L))
-//                .andExpect(jsonPath("$[0].description").value("Хотел бы воспользоваться щёткой для обуви"))
-//                .andExpect(jsonPath("$[0].created").isNotEmpty())
-//                .andExpect(jsonPath("$[0].items", hasSize(0)));
-
-
     }
 
     @Test
@@ -198,85 +181,4 @@ public class ItemRequestControllerTest {
                 .andExpect(jsonPath("$.created").isNotEmpty())
                 .andExpect(jsonPath("$.items", hasSize(0)));
     }
-//    @Test
-//    public void shouldItemRequestAddItemWithRequest() throws Exception {
-//
-//        Item item = new Item(1L, "Щётка для обуви", "Стандартная щётка для обуви", user, true, 1L);
-//        ItemRequestDto itemRequestDto = new ItemRequestDto("Хотел бы воспользоваться щёткой для обуви");
-//        String jsonItem = objectMapper.writeValueAsString(item);
-//        String jsonItemRequest = objectMapper.writeValueAsString(itemRequestDto);
-//        Long userId = 1L;
-//        Long ownerId = 2L;
-//
-//        mockMvc.perform(post("/requests")
-//                        .header("X-Sharer-User-Id", userId)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonItemRequest))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.id").value(1L))
-//                .andExpect(jsonPath("$.description").value("Хотел бы воспользоваться щёткой для обуви"))
-//                .andExpect(jsonPath("$.items", hasSize(0)));
-//
-//        mockMvc.perform(post("/items")
-//                        .header("X-Sharer-User-Id", ownerId)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonItem))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.id").value(1L))
-//                .andExpect(jsonPath("$.name").value("Щётка для обуви"))
-//                .andExpect(jsonPath("$.description").value("Стандартная щётка для обуви"))
-//                .andExpect(jsonPath("$.available").value(true))
-//                .andExpect(jsonPath("$.requestId").value(1L));
-//
-//
-//        mockMvc.perform(get("/requests")
-//                        .header("X-Sharer-User-Id", userId))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$", hasSize(1)))
-//                .andExpect(jsonPath("$[0].id").value(1L))
-//                .andExpect(jsonPath("$[0].description").value("Хотел бы воспользоваться щёткой для обуви"))
-//                .andExpect(jsonPath("$[0].created").isNotEmpty())
-//                .andExpect(jsonPath("$[0].items", hasSize(1)));
-//    }
-//
-//    @Test
-//    public void shouldItemRequestById() throws Exception {
-//
-//        Item item = new Item(1L, "Щётка для обуви", "Стандартная щётка для обуви", user, true, 1L);
-//        ItemRequestDto itemRequestDto = new ItemRequestDto("Хотел бы воспользоваться щёткой для обуви");
-//        String jsonItem = objectMapper.writeValueAsString(item);
-//        String jsonItemRequest = objectMapper.writeValueAsString(itemRequestDto);
-//        Long userId = 1L;
-//        Long ownerId = 2L;
-//        Long requestId = 1L;
-//
-//        mockMvc.perform(post("/requests")
-//                        .header("X-Sharer-User-Id", userId)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonItemRequest))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.id").value(1L))
-//                .andExpect(jsonPath("$.description").value("Хотел бы воспользоваться щёткой для обуви"))
-//                .andExpect(jsonPath("$.items", hasSize(0)));
-//
-//        mockMvc.perform(post("/items")
-//                        .header("X-Sharer-User-Id", ownerId)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonItem))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.id").value(1L))
-//                .andExpect(jsonPath("$.name").value("Щётка для обуви"))
-//                .andExpect(jsonPath("$.description").value("Стандартная щётка для обуви"))
-//                .andExpect(jsonPath("$.available").value(true))
-//                .andExpect(jsonPath("$.requestId").value(1L));
-//
-//
-//        mockMvc.perform(get("/requests/{requestId}", requestId)
-//                        .header("X-Sharer-User-Id", userId))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.id").value(1L))
-//                .andExpect(jsonPath("$.description").value("Хотел бы воспользоваться щёткой для обуви"))
-//                .andExpect(jsonPath("$.created").isNotEmpty())
-//                .andExpect(jsonPath("$.items", hasSize(1)));
-//    }
 }

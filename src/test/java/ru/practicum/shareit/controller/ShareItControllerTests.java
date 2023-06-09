@@ -1,4 +1,4 @@
-package ru.practicum.shareit.Controller;
+package ru.practicum.shareit.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
