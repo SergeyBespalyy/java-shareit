@@ -50,7 +50,7 @@ class BookingServiceMokTest {
         LocalDateTime start = LocalDateTime.now().plusMinutes(1).withNano(000);
         LocalDateTime end = start.plusDays(1).withNano(000);
 
-        booking = new Booking( 1L, item, start, end, booker, null);
+        booking = new Booking(1L, item, start, end, booker, null);
 
         bookingResponseDto = BookingResponseDto
                 .builder()
