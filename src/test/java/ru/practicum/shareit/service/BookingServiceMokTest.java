@@ -109,9 +109,55 @@ class BookingServiceMokTest {
     }
 
     @Test
-    void getAllBookingsStateFuture() {
+    void getAllBookingsStateWAITING() {
         Long userId = 1L;
         State state = State.WAITING;
+        String typeUser = "booker";
+        int from = 0;
+        int size = 10;
+
+        User user = new User();
+        List<Booking> bookingList = new ArrayList<>();
+        bookingList.add(booking);
+        bookingList.add(booking);
+
+        PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size);
+
+        Mockito.when(bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(anyLong(), any(), any()))
+                .thenReturn(bookingList);
+
+        List<BookingResponseDto> bookingResponseDto = bookingService.getAllReserve(userId, state, typeUser, from, size);
+        assertNotNull(bookingResponseDto);
+        assertEquals(2, bookingResponseDto.size());
+    }
+
+    @Test
+    void getAllBookingsStateCURRENT() {
+        Long userId = 1L;
+        State state = State.CURRENT;
+        String typeUser = "booker";
+        int from = 0;
+        int size = 10;
+
+        User user = new User();
+        List<Booking> bookingList = new ArrayList<>();
+        bookingList.add(booking);
+        bookingList.add(booking);
+
+        PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size);
+
+        Mockito.when(bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(anyLong(), any(), any(), any()))
+                .thenReturn(bookingList);
+
+        List<BookingResponseDto> bookingResponseDto = bookingService.getAllReserve(userId, state, typeUser, from, size);
+        assertNotNull(bookingResponseDto);
+        assertEquals(2, bookingResponseDto.size());
+    }
+
+    @Test
+    void getAllBookingsStateREJECTED() {
+        Long userId = 1L;
+        State state = State.REJECTED;
         String typeUser = "booker";
         int from = 0;
         int size = 10;
