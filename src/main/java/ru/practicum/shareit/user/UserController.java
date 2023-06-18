@@ -6,10 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.Map;
 
@@ -33,11 +33,6 @@ public class UserController {
     @PostMapping
     public UserDto create(@Valid @RequestBody UserDto user, BindingResult result) {
         log.info("Получен запрос к эндпоинту /users create");
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldError().getDefaultMessage();
-            log.warn(errorMessage);
-            throw new ValidationException(errorMessage);
-        }
         return userService.create(user);
     }
 
@@ -58,16 +53,11 @@ public class UserController {
                           @RequestBody Map<Object, Object> fields,
                           BindingResult result) {
         log.info("Получен запрос к эндпоинту: /users update с id={}", userId);
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldError("fieldName").getDefaultMessage();
-            log.warn(errorMessage);
-            throw new ValidationException(errorMessage);
-        }
         return userService.update(userId, fields);
     }
 
     @DeleteMapping("/{id}")
-    public HttpStatus delete(@PathVariable("id") Long userId) {
+    public HttpStatus delete(@PathVariable("id") @Positive Long userId) {
         log.info("Получен запрос к эндпоинту: /users delete с id={}", userId);
         userService.delete(userId);
         return HttpStatus.OK;
