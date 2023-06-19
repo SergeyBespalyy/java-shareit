@@ -18,6 +18,7 @@ public class JsonItemRequestDtoTests {
 
     @Autowired
     private JacksonTester<ItemRequestDto> jsonRequest;
+
     @Test
     void testItemRequestDto() throws Exception {
         ItemRequestDto itemRequestDto = new ItemRequestDto("Описание для запроса вещи");
