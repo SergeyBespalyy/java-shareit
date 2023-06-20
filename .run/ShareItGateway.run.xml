@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ru.practicum.server.ShareItGateway" type="Application" factoryName="Application" nameIsGenerated="true">
+  <configuration default="false" name="ShareItGateway" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="ru.practicum.server.ShareItGateway" />
     <module name="shareit-gateway" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="ru.practicum.gateway.*" />
+        <option name="PATTERN" value="ru.practicum.server.utils.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
