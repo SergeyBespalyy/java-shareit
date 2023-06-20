@@ -115,46 +115,6 @@ public class ItemControllerTest {
                 .andExpect(status().is4xxClientError());
     }
 
-//    @Test
-//    public void shouldItemWithoutAvailable() throws Exception {
-//        Item item = new Item(2L, "Дрель", "Простая дрель", owner, null, null);
-//        String jsonItem = objectMapper.writeValueAsString(item);
-//        Long userId = 2L;
-//
-//        mockMvc.perform(post("/items")
-//                        .header("X-Sharer-User-Id", userId)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonItem))
-//                .andExpect(status().is4xxClientError());
-//    }
-
-//    @Test
-//    public void shouldItemWitEmptyName() throws Exception {
-//        Item item = new Item(2L, "", "Простая дрель", owner, true, null);
-//        String jsonItem = objectMapper.writeValueAsString(item);
-//        Long userId = 2L;
-//
-//        mockMvc.perform(post("/items")
-//                        .header("X-Sharer-User-Id", userId)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonItem))
-//                .andExpect(status().is4xxClientError());
-//    }
-//
-//
-//    @Test
-//    public void shouldItemWitEmptyDescription() throws Exception {
-//        Item item = new Item(2L, "Дрель", "", owner, true, null);
-//        String jsonItem = objectMapper.writeValueAsString(item);
-//        Long userId = 2L;
-//
-//        mockMvc.perform(post("/items")
-//                        .header("X-Sharer-User-Id", userId)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonItem))
-//                .andExpect(status().is4xxClientError());
-//    }
-
     @Test
     public void shouldGetItemAll() throws Exception {
         Integer userId = 1;

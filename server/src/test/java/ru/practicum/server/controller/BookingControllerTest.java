@@ -219,26 +219,4 @@ public class BookingControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
     }
-
-//    @Test
-//    public void shouldBookingsWithoutSizeMinus() throws Exception {
-//        Integer bookingId = 1;
-//        Integer userId = 1;
-//
-//        mockMvc.perform(get("/bookings/owner?size=-1&from=0", bookingId)
-//                        .header("X-Sharer-User-Id", userId))
-//                .andDo(print())
-//                .andExpect(status().is4xxClientError());
-//    }
-//
-//    @Test
-//    public void shouldBookingsWithoutFromMinus() throws Exception {
-//        Integer bookingId = 1;
-//        Integer userId = 1;
-//
-//        mockMvc.perform(get("/bookings/owner?size=10&from=-1", bookingId)
-//                        .header("X-Sharer-User-Id", userId))
-//                .andDo(print())
-//                .andExpect(status().is4xxClientError());
-//    }
 }

@@ -17,8 +17,6 @@ import ru.practicum.server.user.UserRepository;
 
 import java.time.LocalDateTime;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @DataJpaTest
 public class CommentDataJpaTest {
 

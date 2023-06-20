@@ -23,7 +23,6 @@ import java.time.LocalDateTime;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -91,32 +90,4 @@ public class CommentControllerTest {
                 .andExpect(jsonPath("$.authorName").value("user"))
                 .andExpect(jsonPath("$.text").value("Add comment from user2"));
     }
-
-//    @Test
-//    public void shouldCreateCommentWithEmptyText() throws Exception {
-//        when(itemService.createComment(any(), anyLong(), anyLong())).thenReturn(commentResponseDto);
-//
-//        commentDto.setText("");
-//
-//        String jsonCommentDto = objectMapper.writeValueAsString(commentDto);
-//
-//        mockMvc.perform(MockMvcRequestBuilders.post("/items/{itemId}/comment", item.getId())
-//                        .header("X-Sharer-User-Id", booker.getId())
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonCommentDto))
-//                .andExpect(status().is4xxClientError());
-//    }
-//
-//    @Test
-//    public void shouldCreateCommentWithNegativeItem() throws Exception {
-//        when(itemService.createComment(any(), anyLong(), anyLong())).thenReturn(commentResponseDto);
-//
-//        String jsonCommentDto = objectMapper.writeValueAsString(commentDto);
-//
-//        mockMvc.perform(post("/items/{itemId}/comment", -1)
-//                        .header("X-Sharer-User-Id", booker.getId())
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonCommentDto))
-//                .andExpect(status().is4xxClientError());
-//    }
 }
