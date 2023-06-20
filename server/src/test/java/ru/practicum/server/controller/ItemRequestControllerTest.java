@@ -59,32 +59,6 @@ public class ItemRequestControllerTest {
                 .build();
     }
 
-//    @Test
-//    public void shouldItemRequestWithoutUser() throws Exception {
-//        String jsonItem = objectMapper.writeValueAsString(item);
-//        Long userId = -99L;
-//
-//        mockMvc.perform(post("/requests")
-//                        .header("X-Sharer-User-Id", userId)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonItem))
-//                .andExpect(status().is4xxClientError());
-//    }
-//
-//    @Test
-//    public void shouldItemRequestWithEmptyDescription() throws Exception {
-//        ItemRequestDto item = new ItemRequestDto(null);
-//        String jsonItem = objectMapper.writeValueAsString(item);
-//        Long userId = 1L;
-//
-//        mockMvc.perform(post("/requests")
-//                        .header("X-Sharer-User-Id", userId)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonItem))
-//                .andExpect(status().is4xxClientError());
-//    }
-
-
     @Test
     public void shouldGetItemRequestWithoutUser() throws Exception {
         mockMvc.perform(get("/requests"))
@@ -113,33 +87,6 @@ public class ItemRequestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }
-
-//    @Test
-//    public void shouldGetItemRequestWithFrom0Size0() throws Exception {
-//        Long userId = 1L;
-//
-//        mockMvc.perform(get("/requests/all?from=0&size=0")
-//                        .header("X-Sharer-User-Id", userId))
-//                .andExpect(status().is4xxClientError());
-//    }
-//
-//    @Test
-//    public void shouldGetItemRequestWithFromMinSize20() throws Exception {
-//        Long userId = 1L;
-//
-//        mockMvc.perform(get("/requests/all?from=-1&size=20")
-//                        .header("X-Sharer-User-Id", userId))
-//                .andExpect(status().is4xxClientError());
-//    }
-
-//    @Test
-//    public void shouldGetItemRequestWithFrom0SizeMin() throws Exception {
-//        Long userId = 1L;
-//
-//        mockMvc.perform(get("/requests/all?from=0&size=-1")
-//                        .header("X-Sharer-User-Id", userId))
-//                .andExpect(status().is4xxClientError());
-//    }
 
     @Test
     public void shouldGetItemRequestWithFrom0Size20() throws Exception {

@@ -18,7 +18,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -92,31 +91,6 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$[0].email").value(userDto.getEmail()));
     }
 
-
-//    @Test
-//    public void shouldAddUserPostWhenFailName() throws Exception {
-//        User user = new User(2L, "", "user@user.com");
-//        String jsonUser = objectMapper.writeValueAsString(user);
-//
-//        mockMvc.perform(post("/users")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonUser))
-//                .andExpect(status().is4xxClientError());
-//    }
-
-//    @Test
-//    public void shouldAdUserPostWhenFailEmail() throws Exception {
-//        User user = new User(2L, "user", "");
-//        String jsonUser = objectMapper.writeValueAsString(user);
-//
-//        mockMvc.perform(post("/users")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonUser))
-//                .andExpect(status().is4xxClientError())
-//                .andExpect(jsonPath("$.error", is("ConstraintViolationException")));
-//    }
-
-
     @Test
     public void shouldUpdatePatchUserWhenStatus200() throws Exception {
         UserDto user = new UserDto(1L, "update", "update@user.com");
@@ -159,10 +133,4 @@ public class UserControllerTest {
         mockMvc.perform(delete("/users/1"))
                 .andExpect(status().isOk());
     }
-
-//    @Test
-//    public void shouldDeleteUserNegativeUser() throws Exception {
-//        mockMvc.perform(delete("/users/-1"))
-//                .andExpect(status().is4xxClientError());
-//    }
 }
