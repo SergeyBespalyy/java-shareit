@@ -1,5 +1,7 @@
 package ru.practicum.geteway.item;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,16 +17,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.Map;
 
-/**
- * Класс описывает ItemController с следующими энпоинтами
- * - GET /items/{id} -  получать данные вещи по идентификатору
- * - GET /items/ -  получать данные всех вещей
- * - POST /items/ -  добавлять вещь в память
- * - PATCH /items/{id} - обновление вещи по id
- * - DELETE  /items/{id} - удаление вещи по id
- * - POST /items/{itemId}/comment - Добавление отзывов  на вещь после того, как взяли её в аренду
- */
-
+@Tag(name = "ItemController", description = "Взаимодействие с вещами")
 @RestController
 @RequestMapping("/items")
 @Slf4j
@@ -34,6 +27,9 @@ public class ItemController {
 
     private final ItemClient itemClient;
 
+    @Operation(
+            summary = "Добавляет вещь в базу данных"
+    )
     @PostMapping
     public ResponseEntity<Object> create(@RequestHeader(Constants.HEADER) Long userId,
                                          @RequestBody @Valid ItemDto dto,
@@ -42,12 +38,18 @@ public class ItemController {
         return itemClient.create(dto, userId);
     }
 
+    @Operation(
+            summary = "Получает все вещи из базы данных"
+    )
     @GetMapping
     public ResponseEntity<Object> getAll(@RequestHeader(Constants.HEADER) Long userId) {
         log.info("Получен запрос к эндпоинту: /items getAll с headers {}", userId);
         return itemClient.getAll(userId);
     }
 
+    @Operation(
+            summary = "Получает данные вещи по идентификатору"
+    )
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@RequestHeader(Constants.HEADER) @Positive Long userId,
                                           @PathVariable("id") @Positive Long itemId) {
@@ -55,6 +57,9 @@ public class ItemController {
         return itemClient.getById(itemId, userId);
     }
 
+    @Operation(
+            summary = "Обновление вещи по id"
+    )
     @PatchMapping("/{id}")
     public ResponseEntity<Object> update(@RequestHeader(Constants.HEADER) Long userId,
                                          @PathVariable("id") Long itemId,
@@ -64,6 +69,9 @@ public class ItemController {
         return itemClient.update(itemId, userId, fields);
     }
 
+    @Operation(
+            summary = "Удаление вещи по id"
+    )
     @DeleteMapping("/{id}")
     public HttpStatus delete(@PathVariable("id") @Positive Long itemId) {
         log.info("Получен запрос к эндпоинту: /items delete с id={}", itemId);
@@ -71,12 +79,20 @@ public class ItemController {
         return HttpStatus.OK;
     }
 
+    @Operation(
+            summary = "Поиск вещи в базе данных",
+            description = "Поиск происходит по описанию или названию вещи"
+    )
     @GetMapping("/search")
     public ResponseEntity<Object> search(@RequestParam("text") String text) {
         log.info("Получен запрос к эндпоинту: items/search с text: {}", text);
         return itemClient.search(text);
     }
 
+    @Operation(
+            summary = "Добавление отзывов  на вещь после того, как взяли её в аренду",
+            description = "Может взять только тот пользователь, который брал вещь в аренду"
+    )
     @PostMapping("/{itemId}/comment")
     public ResponseEntity<Object> addComment(@RequestHeader(Constants.HEADER) Long userId,
                                              @PathVariable("itemId") @Positive Long itemId,
